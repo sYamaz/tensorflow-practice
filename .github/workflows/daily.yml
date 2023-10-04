@@ -1,0 +1,19 @@
+name: daily
+
+on:
+    schedule:
+        # ６時化のき
+        - cron: "0 0/6 * * *"
+    workflow_dispatch:
+env: 
+    OPENWEATHERMAP_APIKEY: ${{ secrets.OPENWEATHERMAP_APIKEY}}
+jobs:
+    stock_temp:
+        name: runner / stock_temp
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+            - run: |
+                curl 'https://api.openweathermap.org/data/2.5/weather?lat=36&lon=140&appid=${{env.OPENWEATHERMAP_APIKEY}}' | jq -r '[.coord.lat, .coord.lon, .main.temp, .main.feels_like, .main.temp_min, .main.temp_max, .main.humidity, .wind.speed, .wind.deg, .clouds.all, .rain."1h"] | @csv' >> datas/temperature.csv 
+            - uses: EndBug/add-and-commit@v9
+            

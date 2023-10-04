@@ -1,0 +1,9 @@
+services:
+  tensor:
+    build:
+      context: .
+      dockerfile: dockerfile
+    working_dir: /work
+    volumes:
+      - .:/work
+    tty: true
